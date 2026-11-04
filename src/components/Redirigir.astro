@@ -1,0 +1,19 @@
+---
+// Página mínima que envía al visitante a la nueva dirección (enlaces antiguos).
+import { url } from '../config';
+interface Props { a: string }
+const destino = url(Astro.props.a);
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Esta página se movió</title>
+    <meta http-equiv="refresh" content={`0; url=${destino}`} />
+    <link rel="canonical" href={destino} />
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <p>Esta página se movió a <a href={destino}>{destino}</a>.</p>
+  </body>
+</html>

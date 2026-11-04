@@ -1,11 +1,17 @@
 ---
 // Un estante de la biblioteca: libros verticales con el título en el lomo.
-import type { CollectionEntry } from 'astro:content';
 import { url } from '../config';
 
+export interface Libro {
+  id: string;
+  titulo: string;
+  lomo: string;
+  borrador: boolean;
+  href: string;
+}
 interface Props {
   nombre: string;
-  libros: CollectionEntry<'fundamentos'>[];
+  libros: Libro[];
 }
 const { nombre, libros } = Astro.props;
 
@@ -25,19 +31,19 @@ const idEstante = `estante-${nombre.toLowerCase().normalize('NFD').replace(/[^a-
   <ul class="libros">
     {
       libros.map((libro) => {
-        const m = medidas(libro.data.titulo);
+        const m = medidas(libro.titulo);
         const estilo = `--alto:${m.alto}rem;--ancho:${m.ancho}rem`;
-        const clases = ['libro', `lomo-${libro.data.lomo}`, `banda-${m.banda}`];
+        const clases = ['libro', `lomo-${libro.lomo}`, `banda-${m.banda}`];
         return (
           <li>
-            {libro.data.borrador ? (
+            {libro.borrador ? (
               <span class:list={[...clases, 'borrador']} style={estilo} title="En preparación">
-                <span class="texto">{libro.data.titulo}</span>
+                <span class="texto">{libro.titulo}</span>
                 <span class="visually-hidden"> (en preparación)</span>
               </span>
             ) : (
-              <a href={url(`/fundamentos/${libro.id}/`)} class:list={clases} style={estilo}>
-                <span class="texto">{libro.data.titulo}</span>
+              <a href={url(libro.href)} class:list={clases} style={estilo}>
+                <span class="texto">{libro.titulo}</span>
               </a>
             )}
           </li>

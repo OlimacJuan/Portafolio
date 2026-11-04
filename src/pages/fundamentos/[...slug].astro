@@ -1,17 +1,10 @@
 ---
-import { getCollection, render } from 'astro:content';
-import Lectura from '../../layouts/Lectura.astro';
-import CalculadoraViga from '../../components/CalculadoraViga.astro';
-import ModeloCAD from '../../components/ModeloCAD.astro';
-
+// Dirección antigua: redirige al libro en la sección Conocimiento.
+import { getCollection } from 'astro:content';
+import Redirigir from '../../components/Redirigir.astro';
 export async function getStaticPaths() {
-  const libros = (await getCollection('fundamentos')).filter((l) => !l.data.borrador);
-  return libros.map((l) => ({ params: { slug: l.id }, props: { libro: l } }));
+  return (await getCollection('fundamentos')).filter((e) => !e.data.borrador).map((e) => ({ params: { slug: e.id } }));
 }
-const { libro } = Astro.props;
-const { Content } = await render(libro);
+const { slug } = Astro.params;
 ---
-
-<Lectura titulo={libro.data.titulo} resumen={libro.data.resumen} ejemplo={libro.data.ejemplo} volver={{ href: '/fundamentos/', texto: 'Biblioteca de fundamentos' }}>
-  <Content components={{ CalculadoraViga, ModeloCAD }} />
-</Lectura>
+<Redirigir a={`/conocimiento/fundamentos/${slug}/`} />

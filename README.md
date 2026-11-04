@@ -1,6 +1,6 @@
 # Portafolio
 
-Portafolio digital de Juan Camilo, estudiante de Ingeniería Mecánica: proyectos, metodologías de diseño y fundamentos teóricos.
+Portafolio digital de Juan Camilo, estudiante de Ingeniería Mecánica: proyectos y una biblioteca de conocimiento (metodologías de diseño y fundamentos teóricos).
 
 Sitio publicado: https://olimacjuan.github.io/Portafolio/
 
