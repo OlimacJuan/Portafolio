@@ -3,9 +3,9 @@
 export const sitio = {
   nombre: 'Juan Camilo',
   titulo: 'Estudiante de Ingeniería Mecánica',
-  universidad: '', // ej. 'Universidad Nacional de Colombia'
-  ciudad: '', // ej. 'Bogotá, Colombia'
-  correo: '', // el correo que quieres mostrar públicamente
+  universidad: 'Universidad de los Andes',
+  ciudad: 'Bogotá, Colombia',
+  correo: 'jc.cortesv1@uniandes.edu.co',
   linkedin: '', // URL completa
   github: 'https://github.com/OlimacJuan',
   cv: '', // ruta a un PDF dentro de /public, ej. '/cv.pdf'

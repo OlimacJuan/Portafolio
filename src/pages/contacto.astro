@@ -5,6 +5,7 @@ const canales = [
   sitio.correo && { nombre: 'Correo', valor: sitio.correo, href: `mailto:${sitio.correo}` },
   sitio.linkedin && { nombre: 'LinkedIn', valor: sitio.linkedin.replace(/^https?:\/\/(www\.)?/, ''), href: sitio.linkedin },
   sitio.github && { nombre: 'GitHub', valor: sitio.github.replace(/^https?:\/\//, ''), href: sitio.github },
+  sitio.ciudad && { nombre: 'Ubicación', valor: `${sitio.universidad ? sitio.universidad + ', ' : ''}${sitio.ciudad}`, href: '' },
 ].filter(Boolean) as { nombre: string; valor: string; href: string }[];
 ---
 <Base titulo="Contacto">
@@ -12,7 +13,7 @@ const canales = [
     <h1>Contacto</h1>
     <p class="texto">¿Prácticas, semilleros, un proyecto o una pregunta sobre algo que publiqué? Escríbeme.</p>
     <dl class="canales">
-      {canales.map((c) => (<div><dt>{c.nombre}</dt><dd><a href={c.href}>{c.valor}</a></dd></div>))}
+      {canales.map((c) => (<div><dt>{c.nombre}</dt><dd>{c.href ? <a href={c.href}>{c.valor}</a> : c.valor}</dd></div>))}
     </dl>
     <p class="nota">
       Este sitio no tiene formularios ni recolecta datos de los visitantes. Si me escribes, uso tus datos solo para
