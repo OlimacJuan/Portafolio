@@ -1,0 +1,15 @@
+---
+import { getCollection, render } from 'astro:content';
+import Lectura from '../../../layouts/Lectura.astro';
+
+export async function getStaticPaths() {
+  const metodos = (await getCollection('metodologias')).filter((m) => !m.data.borrador);
+  return metodos.map((m) => ({ params: { slug: m.id }, props: { metodo: m } }));
+}
+const { metodo } = Astro.props;
+const { Content } = await render(metodo);
+---
+
+<Lectura titulo={metodo.data.titulo} resumen={metodo.data.resumen} ejemplo={metodo.data.ejemplo} volver={{ href: '/conocimiento/', texto: 'Conocimiento' }}>
+  <Content />
+</Lectura>

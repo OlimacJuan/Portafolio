@@ -17,8 +17,8 @@ https://olimacjuan.github.io/Portafolio/
 | -------------------------------- | -------------------------------------------------- |
 | Mi nombre, universidad, enlaces  | `src/config.ts`                                    |
 | Un proyecto                      | `src/content/proyectos/<nombre-del-proyecto>/`     |
-| Un tema teórico (libro)          | `src/content/fundamentos/<tema>.mdx`               |
-| Una metodología                  | `src/content/metodologias/<metodo>.mdx`            |
+| Un tema teórico (libro de Conocimiento) | `src/content/fundamentos/<tema>.mdx`        |
+| Una metodología (libro del primer estante de Conocimiento) | `src/content/metodologias/<metodo>.mdx` |
 | Un modelo 3D (.glb)              | `public/modelos/`                                  |
 | Los colores                      | `src/styles/global.css` (bloque `@theme`)          |
 
@@ -72,7 +72,9 @@ Si el proyecto fue en equipo, pide permiso a tus compañeros antes de publicarlo
 
 ---
 
-## Agregar un tema teórico (libro de la estantería)
+## Agregar un tema teórico (libro de la sección Conocimiento)
+
+La sección **Conocimiento** es una biblioteca: el primer estante tiene las metodologías de diseño y los demás estantes, los fundamentos teóricos.
 
 Crea `src/content/fundamentos/mi-tema.mdx`:
 
@@ -95,7 +97,7 @@ Ya hay libros creados como `borrador: true` (desvanecidos). Para escribir uno, a
 
 ## Agregar una metodología
 
-Crea `src/content/metodologias/mi-metodo.mdx` con `titulo`, `resumen`, `orden` y `borrador`, igual que los temas.
+Crea `src/content/metodologias/mi-metodo.mdx` con `titulo`, `resumen`, `lomo` (color), `orden` y `borrador`, igual que los temas. Aparece como un libro en el estante "Metodologías de diseño".
 
 ---
 

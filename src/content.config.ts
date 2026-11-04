@@ -57,6 +57,7 @@ const metodologias = defineCollection({
   schema: z.object({
     titulo: z.string(),
     resumen: z.string(),
+    lomo: z.enum(['marino', 'cian', 'amarillo', 'azul', 'verde', 'gris']).default('azul'),
     orden: z.number().default(100),
     borrador: z.boolean().default(false),
     ejemplo: z.boolean().default(false),

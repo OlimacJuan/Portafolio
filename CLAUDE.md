@@ -13,7 +13,8 @@ Portafolio de un estudiante de Ingeniería Mecánica (Colombia). Todo el conteni
 ## Dirección visual (definida por Juan Camilo)
 
 - Proyectos: post-its con imagen principal sobre un fondo de plano (blueprint).
-- Fundamentos: estanterías con libros verticales y el título en el lomo.
+- Conocimiento (`/conocimiento/`): une metodologías y fundamentos en una biblioteca de estanterías con libros verticales y el título en el lomo; el primer estante es "Metodologías de diseño". Libros en `/conocimiento/fundamentos/<id>/` y `/conocimiento/metodologias/<id>/`; las rutas viejas `/fundamentos/` y `/metodologias/` redirigen.
+- Inicio: hero, post-its recientes y un libro "Conocimiento" de pie sobre el mismo blueprint.
 - Paleta fija: texto #000000 y #44546A; fondos #FFFFFF y #E7E6E6; énfasis #2B273F, #2DACDD, #A5A5A5, #FFC000, #4472C4, #70AD47; vínculo #0563C1, visitado #954F72. No introducir colores fuera de la paleta salvo tintes derivados de ella.
 - Tipografías: IBM Plex Sans (texto), Caveat (escritura a mano en post-its), IBM Plex Mono solo para cotas y datos.
 

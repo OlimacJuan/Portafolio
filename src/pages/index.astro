@@ -9,23 +9,6 @@ const proyectos = (await getCollection('proyectos')).sort((a, b) => b.data.fecha
 const destacados = [...proyectos.filter((p) => p.data.destacado), ...proyectos.filter((p) => !p.data.destacado)].slice(0, 3);
 const vacios = Math.max(0, 3 - destacados.length);
 
-const secciones = [
-  {
-    href: '/proyectos/',
-    titulo: 'Proyectos',
-    texto: 'Del problema al prototipo: requisitos, alternativas, cálculos, simulaciones y resultados de cada proyecto.',
-  },
-  {
-    href: '/metodologias/',
-    titulo: 'Metodologías de diseño',
-    texto: 'Cómo abordo un diseño: VDI 2221, matriz morfológica, QFD, AMEF y dónde apliqué cada una.',
-  },
-  {
-    href: '/fundamentos/',
-    titulo: 'Fundamentos teóricos',
-    texto: 'La teoría detrás de los proyectos, con ecuaciones explicadas paso a paso y calculadoras para experimentar.',
-  },
-];
 ---
 
 <Base>
@@ -39,7 +22,7 @@ const secciones = [
         </p>
         <div class="acciones">
           <a class="boton boton-primario" href={url('/proyectos/')}>Ver proyectos</a>
-          <a class="boton boton-secundario" href={url('/fundamentos/')}>Explorar fundamentos</a>
+          <a class="boton boton-secundario" href={url('/conocimiento/')}>Explorar conocimiento</a>
         </div>
       </div>
 
@@ -68,31 +51,32 @@ const secciones = [
     </div>
   </section>
 
-  <section class="destacados blueprint" aria-labelledby="t-destacados">
+  <section class="destacados blueprint" aria-label="Proyectos y conocimiento">
     <div class="interior">
       <h2 id="t-destacados">Proyectos recientes</h2>
       <div class="tablero">
         {destacados.map((p, i) => <PostIt proyecto={p} indice={i} />)}
         {Array.from({ length: vacios }, (_, i) => <PostItVacio indice={i} />)}
       </div>
+      <a class="ver-todos" href={url('/proyectos/')}>Ver todos los proyectos</a>
+
+      <h2 class="visually-hidden">Conocimiento</h2>
+      <div class="saber-grid">
+      <div class="estante-solo">
+        <a class="libro-grande" href={url('/conocimiento/')} aria-describedby="d-conocimiento">
+          <span class="lomo-texto" id="t-conocimiento">Conocimiento</span>
+        </a>
+        <span class="repisa" aria-hidden="true"></span>
+      </div>
+      <p class="saber-texto" id="d-conocimiento">
+        Metodologías de diseño y fundamentos teóricos, con ecuaciones explicadas paso a paso y calculadoras para
+        experimentar. Toma el libro para entrar a la biblioteca.
+      </p>
+    </div>
     </div>
   </section>
 
-  <section class="indice" aria-label="Secciones del portafolio">
-    <ul class="interior">
-      {
-        secciones.map((s) => (
-          <li>
-            <a href={url(s.href)}>
-              <span class="indice-titulo">{s.titulo}</span>
-              <span class="indice-texto">{s.texto}</span>
-              <svg class="flecha" aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
+
 </Base>
 
 <style>
@@ -229,61 +213,111 @@ const secciones = [
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
   }
 
-  .indice ul {
-    display: grid;
-    padding-top: 2.5rem;
-    padding-bottom: 3.5rem;
+  .ver-todos,
+  .ver-todos:visited {
+    display: inline-block;
+    margin-top: 3rem;
+    color: #fff;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--color-amarillo);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3em;
   }
-  .indice li + li {
-    border-top: 1px solid var(--color-fondo-2);
+
+  /* Libro "Conocimiento" de pie sobre el plano */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
-  .indice a {
+  .saber-grid {
     display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 0.35rem 2rem;
-    padding: 1.6rem 0;
+    gap: 2rem 3.5rem;
+    align-items: end;
+    margin-top: 4rem;
+  }
+  @media (min-width: 720px) {
+    .saber-grid {
+      grid-template-columns: auto 1fr;
+    }
+  }
+  .estante-solo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: fit-content;
+  }
+  .libro-grande {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 1.5rem;
+    width: 4.75rem;
+    height: 19rem;
+    background: var(--color-amarillo);
+    color: var(--color-texto);
     text-decoration: none;
+    border-radius: 4px 4px 1px 1px;
+    box-shadow:
+      inset 4px 0 0 rgb(255 255 255 / 0.25),
+      inset -6px 0 0 rgb(0 0 0 / 0.14),
+      0 18px 30px -14px rgb(0 0 0 / 0.7);
+    transition: transform 260ms var(--ease-out-fuerte);
+  }
+  .libro-grande:visited {
     color: var(--color-texto);
   }
-  @media (min-width: 800px) {
-    .indice a {
-      grid-template-columns: 18rem 1fr auto;
-      align-items: baseline;
-    }
+  .libro-grande::before,
+  .libro-grande::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 7px;
+    background: var(--color-marino);
+    opacity: 0.85;
   }
-  .indice-titulo {
-    font-size: 1.4rem;
-    font-weight: 650;
-    letter-spacing: -0.015em;
+  .libro-grande::before {
+    top: 1.4rem;
+    box-shadow: 0 12px 0 -4px var(--color-marino);
   }
-  .indice-texto {
-    color: var(--color-texto-2);
-    line-height: 1.55;
-    max-width: 60ch;
-    grid-column: 1 / -1;
-    grid-row: 2;
+  .libro-grande::after {
+    bottom: 1.4rem;
+    box-shadow: 0 -12px 0 -4px var(--color-marino);
   }
-  @media (min-width: 800px) {
-    .indice-texto {
-      grid-column: auto;
-      grid-row: auto;
-    }
+  .lomo-texto {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 1.55rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
   }
-  .flecha {
-    align-self: center;
-    color: var(--color-texto-2);
-    transition: transform 200ms var(--ease-out-fuerte);
+  .repisa {
+    display: block;
+    width: 13rem;
+    height: 0.8rem;
+    background: color-mix(in oklab, var(--color-cian) 55%, var(--color-marino));
+    border-top: 2px solid var(--color-cian);
+    box-shadow: 0 10px 16px -8px rgb(0 0 0 / 0.6);
+  }
+  .libro-grande:active {
+    transform: translateY(-8px) scale(0.98);
   }
   @media (hover: hover) and (pointer: fine) {
-    .indice a:hover .flecha {
-      transform: translateX(6px);
-      color: var(--color-texto);
+    .libro-grande:hover {
+      transform: translateY(-16px);
     }
-    .indice a:hover .indice-titulo {
-      text-decoration: underline;
-      text-decoration-color: var(--color-amarillo);
-      text-decoration-thickness: 3px;
-      text-underline-offset: 0.25em;
-    }
+  }
+  .saber-texto {
+    max-width: 42ch;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: color-mix(in oklab, white 82%, var(--color-cian));
+    padding-bottom: 1.5rem;
   }
 </style>

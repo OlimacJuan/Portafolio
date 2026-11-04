@@ -1,0 +1,92 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Estante, { type Libro } from '../../components/Estante.astro';
+
+const estantesTeoria = [
+  'Mecánica de sólidos',
+  'Diseño de máquinas',
+  'Termofluidos',
+  'Dinámica y vibraciones',
+  'Materiales y manufactura',
+] as const;
+
+const porOrden = <T extends { data: { orden: number; titulo: string } }>(a: T, b: T) =>
+  a.data.orden - b.data.orden || a.data.titulo.localeCompare(b.data.titulo);
+
+const metodos: Libro[] = (await getCollection('metodologias')).sort(porOrden).map((m) => ({
+  id: m.id,
+  titulo: m.data.titulo,
+  lomo: m.data.lomo,
+  borrador: m.data.borrador,
+  href: `/conocimiento/metodologias/${m.id}/`,
+}));
+
+const fundamentos = (await getCollection('fundamentos')).sort(porOrden);
+const estantes = [
+  { nombre: 'Metodologías de diseño', libros: metodos },
+  ...estantesTeoria.map((nombre) => ({
+    nombre,
+    libros: fundamentos
+      .filter((l) => l.data.estante === nombre)
+      .map(
+        (l): Libro => ({
+          id: l.id,
+          titulo: l.data.titulo,
+          lomo: l.data.lomo,
+          borrador: l.data.borrador,
+          href: `/conocimiento/fundamentos/${l.id}/`,
+        }),
+      ),
+  })),
+].filter((e) => e.libros.length > 0);
+---
+
+<Base
+  titulo="Conocimiento"
+  descripcion="Metodologías de diseño y fundamentos teóricos de ingeniería mecánica, con ecuaciones explicadas y calculadoras interactivas."
+>
+  <div class="interior">
+    <header class="encabezado">
+      <h1>Conocimiento</h1>
+      <p>
+        Cómo diseño y la teoría que lo sostiene, organizados como una biblioteca. El primer estante reúne las
+        metodologías de diseño; los demás, los fundamentos teóricos. Toma un libro para leerlo. Los lomos desvanecidos
+        son temas en preparación.
+      </p>
+    </header>
+    <div class="biblioteca">
+      {estantes.map((e) => <Estante nombre={e.nombre} libros={e.libros} />)}
+    </div>
+  </div>
+</Base>
+
+<style>
+  .interior {
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 3rem 1rem 5rem;
+  }
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .encabezado p {
+    margin-top: 1rem;
+    max-width: 58ch;
+    line-height: 1.55;
+    color: var(--color-texto-2);
+  }
+  .biblioteca {
+    margin-top: 2.5rem;
+    background: var(--color-fondo-2);
+    border-radius: 6px;
+    display: grid;
+    gap: 2rem 1.5rem;
+    padding: 0.5rem 1.25rem 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.04);
+  }
+</style>

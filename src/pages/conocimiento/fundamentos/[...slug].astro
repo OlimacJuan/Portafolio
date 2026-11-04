@@ -1,0 +1,17 @@
+---
+import { getCollection, render } from 'astro:content';
+import Lectura from '../../../layouts/Lectura.astro';
+import CalculadoraViga from '../../../components/CalculadoraViga.astro';
+import ModeloCAD from '../../../components/ModeloCAD.astro';
+
+export async function getStaticPaths() {
+  const libros = (await getCollection('fundamentos')).filter((l) => !l.data.borrador);
+  return libros.map((l) => ({ params: { slug: l.id }, props: { libro: l } }));
+}
+const { libro } = Astro.props;
+const { Content } = await render(libro);
+---
+
+<Lectura titulo={libro.data.titulo} resumen={libro.data.resumen} ejemplo={libro.data.ejemplo} volver={{ href: '/conocimiento/', texto: 'Conocimiento' }}>
+  <Content components={{ CalculadoraViga, ModeloCAD }} />
+</Lectura>
