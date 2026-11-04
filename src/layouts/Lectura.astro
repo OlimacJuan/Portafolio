@@ -1,0 +1,67 @@
+---
+// Plantilla para páginas de lectura (fundamentos y metodologías).
+import 'katex/dist/katex.min.css';
+import Base from './Base.astro';
+import { url } from '../config';
+
+interface Props {
+  titulo: string;
+  resumen?: string;
+  volver: { href: string; texto: string };
+  ejemplo?: boolean;
+}
+const { titulo, resumen, volver, ejemplo } = Astro.props;
+---
+
+<Base titulo={titulo} descripcion={resumen}>
+  <article class="lectura">
+    <a class="volver" href={url(volver.href)}>← {volver.texto}</a>
+    <h1>{titulo}</h1>
+    {resumen && <p class="resumen">{resumen}</p>}
+    {ejemplo && <p class="aviso-ejemplo">Contenido de ejemplo para mostrar el formato. Reemplázalo por el tuyo.</p>}
+    <div class="prosa">
+      <slot />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .lectura {
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 2.5rem 1rem 5rem;
+  }
+  .volver {
+    font-size: 0.9rem;
+    color: var(--color-texto-2);
+    text-decoration: none;
+  }
+  .volver:hover {
+    text-decoration: underline;
+  }
+  h1 {
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.08;
+    margin-top: 1rem;
+    max-width: 22ch;
+  }
+  .resumen {
+    font-size: 1.2rem;
+    line-height: 1.55;
+    color: var(--color-texto-2);
+    margin-top: 1rem;
+    max-width: 60ch;
+  }
+  .aviso-ejemplo {
+    margin-top: 1.25rem;
+    display: inline-block;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.75rem;
+    background: color-mix(in oklab, var(--color-amarillo) 35%, white);
+    border-radius: 6px;
+  }
+  .prosa {
+    margin-top: 2.5rem;
+  }
+</style>

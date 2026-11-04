@@ -1,0 +1,24 @@
+---
+// Post-it vacío que se muestra mientras hay pocos proyectos publicados.
+interface Props { indice?: number }
+const giros = [1.8, -1.4, 2.1];
+const giro = giros[(Astro.props.indice ?? 0) % giros.length];
+---
+<div class="vacio" style={`--giro:${giro}deg`} aria-hidden="true">
+  <span>Próximo proyecto</span>
+</div>
+<style>
+  .vacio {
+    display: grid;
+    place-items: center;
+    min-height: 18rem;
+    border: 1.5px dashed var(--blueprint-linea-fuerte);
+    color: color-mix(in oklab, var(--color-cian) 75%, white);
+    font-family: var(--font-mano);
+    font-size: 1.6rem;
+    transform: rotate(var(--giro));
+  }
+  @media (max-width: 640px) {
+    .vacio { display: none; }
+  }
+</style>

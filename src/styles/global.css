@@ -1,0 +1,217 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/ibm-plex-sans';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource-variable/caveat';
+
+/* Paleta definida por Juan Camilo. Cambia un color aquí y cambia en todo el sitio. */
+@theme {
+  --color-texto: #000000;
+  --color-texto-2: #44546a;
+  --color-fondo: #ffffff;
+  --color-fondo-2: #e7e6e6;
+  --color-marino: #2b273f;
+  --color-cian: #2dacdd;
+  --color-gris: #a5a5a5;
+  --color-amarillo: #ffc000;
+  --color-azul: #4472c4;
+  --color-verde: #70ad47;
+  --color-vinculo: #0563c1;
+  --color-vinculo-visitado: #954f72;
+
+  --font-sans: 'IBM Plex Sans Variable', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-mano: 'Caveat Variable', cursive;
+
+  --ease-out-fuerte: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+:root {
+  /* Derivados de la paleta */
+  --blueprint: var(--color-marino);
+  --blueprint-linea: color-mix(in oklab, var(--color-cian) 22%, transparent);
+  --blueprint-linea-fuerte: color-mix(in oklab, var(--color-cian) 40%, transparent);
+  --postit-amarillo: color-mix(in oklab, var(--color-amarillo) 48%, white);
+  --postit-cian: color-mix(in oklab, var(--color-cian) 32%, white);
+  --postit-verde: color-mix(in oklab, var(--color-verde) 34%, white);
+  --postit-blanco: #fbfbf8;
+  color-scheme: light;
+}
+
+html {
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  scrollbar-color: var(--color-gris) var(--color-fondo-2);
+}
+
+body {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+::selection {
+  background: var(--color-amarillo);
+  color: var(--color-texto);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-cian);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+a {
+  color: var(--color-vinculo);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+a:visited {
+  color: var(--color-vinculo-visitado);
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+  letter-spacing: -0.02em;
+}
+
+/* Fondo de plano (blueprint): retícula fina y gruesa en cian sobre marino */
+.blueprint {
+  background-color: var(--blueprint);
+  background-image:
+    linear-gradient(var(--blueprint-linea-fuerte) 1px, transparent 1px),
+    linear-gradient(90deg, var(--blueprint-linea-fuerte) 1px, transparent 1px),
+    linear-gradient(var(--blueprint-linea) 1px, transparent 1px),
+    linear-gradient(90deg, var(--blueprint-linea) 1px, transparent 1px);
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+  background-position: -1px -1px;
+  color: #fff;
+}
+
+/* Texto largo: proyectos, fundamentos y metodologías */
+.prosa {
+  max-width: 70ch;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--color-texto);
+}
+.prosa > * + * {
+  margin-top: 1.1em;
+}
+.prosa h2 {
+  font-size: 1.6rem;
+  font-weight: 650;
+  line-height: 1.2;
+  margin-top: 2.4em;
+  padding-top: 0.6em;
+  border-top: 1px solid var(--color-fondo-2);
+}
+.prosa h3 {
+  font-size: 1.2rem;
+  font-weight: 650;
+  margin-top: 1.8em;
+}
+.prosa h2 + *,
+.prosa h3 + * {
+  margin-top: 0.6em;
+}
+.prosa ul {
+  list-style: disc;
+  padding-left: 1.4em;
+}
+.prosa ol {
+  list-style: decimal;
+  padding-left: 1.4em;
+}
+.prosa li + li {
+  margin-top: 0.35em;
+}
+.prosa strong {
+  font-weight: 650;
+}
+.prosa blockquote {
+  border-left: 1px solid var(--color-gris);
+  padding-left: 1em;
+  color: var(--color-texto-2);
+}
+.prosa table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+}
+.prosa th,
+.prosa td {
+  text-align: left;
+  padding: 0.5em 0.75em;
+  border-bottom: 1px solid var(--color-fondo-2);
+}
+.prosa th {
+  font-weight: 600;
+  color: var(--color-texto-2);
+}
+.prosa code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+.prosa :not(pre) > code {
+  background: var(--color-fondo-2);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+.prosa pre:not(.mermaid) {
+  padding: 1em 1.2em;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid var(--color-fondo-2);
+  font-size: 0.9rem;
+}
+.prosa img {
+  border-radius: 6px;
+}
+.prosa figure figcaption {
+  font-size: 0.9rem;
+  color: var(--color-texto-2);
+  margin-top: 0.5em;
+}
+
+/* Ecuaciones KaTeX */
+.prosa .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.6em 0;
+  font-size: 1.12em;
+}
+
+/* Diagramas Mermaid: ocultos hasta que se dibujan para evitar ver el texto crudo */
+.prosa pre.mermaid {
+  display: flex;
+  justify-content: center;
+  padding: 1.5em 1em;
+  background: var(--color-fondo);
+  border: 1px solid var(--color-fondo-2);
+  border-radius: 8px;
+  overflow-x: auto;
+  color: transparent;
+  min-height: 6rem;
+}
+.prosa pre.mermaid[data-processed='true'] {
+  color: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

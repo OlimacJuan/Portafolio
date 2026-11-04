@@ -1,0 +1,154 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PostIt from '../../components/PostIt.astro';
+import PostItVacio from '../../components/PostItVacio.astro';
+import { sitio } from '../../config';
+
+const proyectos = (await getCollection('proyectos')).sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf());
+const areas = [...new Set(proyectos.map((p) => p.data.area))];
+const vacios = Math.max(0, 3 - proyectos.length);
+const iniciales = sitio.nombre
+  .split(' ')
+  .map((p) => p[0])
+  .join('.');
+---
+
+<Base titulo="Proyectos" descripcion="Proyectos de ingeniería mecánica: diseño, análisis, simulación y fabricación.">
+  <section class="plano blueprint">
+    <div class="interior">
+      <header class="encabezado">
+        <h1>Proyectos</h1>
+        <p>Cada post-it es un proyecto. Ábrelo para ver el problema, el proceso de diseño, los cálculos y los resultados.</p>
+      </header>
+
+      {
+        areas.length > 1 && (
+          <div class="filtros" role="group" aria-label="Filtrar por área">
+            <button type="button" aria-pressed="true" data-filtro="">
+              Todos
+            </button>
+            {areas.map((a) => (
+              <button type="button" aria-pressed="false" data-filtro={a}>
+                {a}
+              </button>
+            ))}
+          </div>
+        )
+      }
+
+      <div class="tablero" data-tablero>
+        {proyectos.map((p, i) => <PostIt proyecto={p} indice={i} />)}
+        {Array.from({ length: vacios }, (_, i) => <PostItVacio indice={i + 1} />)}
+      </div>
+
+      <table class="cajetin" aria-label="Cajetín del plano">
+        <tbody>
+          <tr>
+            <th scope="row">Plano</th>
+            <td>Índice de proyectos</td>
+            <th scope="row">Hoja</th>
+            <td>1 de 1</td>
+          </tr>
+          <tr>
+            <th scope="row">Dibujó</th>
+            <td>{iniciales}.</td>
+            <th scope="row">Proyectos</th>
+            <td>{proyectos.length}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const botones = document.querySelectorAll<HTMLButtonElement>('[data-filtro]');
+  const notas = document.querySelectorAll<HTMLElement>('[data-tablero] [data-area]');
+  botones.forEach((b) =>
+    b.addEventListener('click', () => {
+      const f = b.dataset.filtro;
+      botones.forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
+      notas.forEach((n) => (n.hidden = !!f && n.dataset.area !== f));
+    }),
+  );
+</script>
+
+<style>
+  .plano {
+    min-height: calc(100dvh - 4rem);
+  }
+  .interior {
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 3rem 1rem 3rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .encabezado h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .encabezado p {
+    margin-top: 1rem;
+    max-width: 52ch;
+    line-height: 1.55;
+    color: color-mix(in oklab, white 82%, var(--color-cian));
+  }
+  .filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+  .filtros button {
+    font: inherit;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid var(--blueprint-linea-fuerte);
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    transition:
+      background-color 160ms ease,
+      transform 160ms var(--ease-out-fuerte);
+  }
+  .filtros button:active {
+    transform: scale(0.97);
+  }
+  .filtros button[aria-pressed='true'] {
+    background: var(--color-cian);
+    border-color: var(--color-cian);
+    color: var(--color-texto);
+  }
+  .tablero {
+    margin-top: 3rem;
+    display: grid;
+    gap: 3rem 2.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  }
+  .tablero > :global([hidden]) {
+    display: none;
+  }
+  .cajetin {
+    align-self: flex-end;
+    margin-top: 4rem;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: color-mix(in oklab, white 85%, var(--color-cian));
+  }
+  .cajetin th,
+  .cajetin td {
+    border: 1px solid var(--blueprint-linea-fuerte);
+    padding: 0.35rem 0.7rem;
+    text-align: left;
+  }
+  .cajetin th {
+    font-weight: 400;
+    color: var(--color-cian);
+  }
+</style>

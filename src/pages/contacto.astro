@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import { sitio, url } from '../config';
+const canales = [
+  sitio.correo && { nombre: 'Correo', valor: sitio.correo, href: `mailto:${sitio.correo}` },
+  sitio.linkedin && { nombre: 'LinkedIn', valor: sitio.linkedin.replace(/^https?:\/\/(www\.)?/, ''), href: sitio.linkedin },
+  sitio.github && { nombre: 'GitHub', valor: sitio.github.replace(/^https?:\/\//, ''), href: sitio.github },
+].filter(Boolean) as { nombre: string; valor: string; href: string }[];
+---
+<Base titulo="Contacto">
+  <div class="interior">
+    <h1>Contacto</h1>
+    <p class="texto">¿Prácticas, semilleros, un proyecto o una pregunta sobre algo que publiqué? Escríbeme.</p>
+    <dl class="canales">
+      {canales.map((c) => (<div><dt>{c.nombre}</dt><dd><a href={c.href}>{c.valor}</a></dd></div>))}
+    </dl>
+    <p class="nota">
+      Este sitio no tiene formularios ni recolecta datos de los visitantes. Si me escribes, uso tus datos solo para
+      responderte. Más detalles en el <a href={url('/legal/')}>aviso legal</a>.
+    </p>
+  </div>
+</Base>
+<style>
+  .interior { max-width: 76rem; margin: 0 auto; padding: 3rem 1rem 6rem; }
+  h1 { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+  .texto { margin-top: 1.25rem; max-width: 60ch; font-size: 1.1rem; line-height: 1.6; color: var(--color-texto-2); }
+  .canales { margin-top: 2.5rem; display: grid; gap: 0; max-width: 40rem; border-top: 3px solid var(--color-marino); }
+  .canales div { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--color-fondo-2); }
+  .canales dt { color: var(--color-texto-2); }
+  .canales dd { overflow-wrap: anywhere; }
+  .nota { margin-top: 2rem; max-width: 60ch; font-size: 0.9rem; color: var(--color-texto-2); line-height: 1.6; }
+</style>

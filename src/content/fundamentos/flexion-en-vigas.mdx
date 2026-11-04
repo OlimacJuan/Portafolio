@@ -1,0 +1,50 @@
+---
+titulo: Flexión en vigas
+estante: Mecánica de sólidos
+resumen: Cómo se distribuye el esfuerzo en una viga cargada, de dónde sale la fórmula de flexión y cómo usarla para dimensionar.
+lomo: marino
+orden: 10
+ejemplo: true
+---
+
+## La idea
+
+Cuando una viga se flexiona, las fibras de arriba se comprimen y las de abajo se estiran. En el medio hay una línea que no cambia de longitud: el **eje neutro**. El esfuerzo crece en proporción a la distancia a ese eje.
+
+## La fórmula de flexión
+
+Para un material elástico lineal, el esfuerzo normal a una distancia $y$ del eje neutro es
+
+$$
+\sigma(y) = -\frac{M\, y}{I}
+$$
+
+donde $M$ es el momento flector en la sección e $I$ el segundo momento de área. El esfuerzo máximo aparece en la fibra más alejada, $y = c$:
+
+$$
+\sigma_{max} = \frac{M\, c}{I}
+$$
+
+Para una sección rectangular de base $b$ y altura $h$:
+
+$$
+I = \frac{b\, h^{3}}{12}, \qquad c = \frac{h}{2}
+$$
+
+## Caso típico: carga en el centro
+
+En una viga simplemente apoyada de luz $L$ con una carga puntual $P$ en el centro, el momento máximo está bajo la carga:
+
+$$
+M_{max} = \frac{P\, L}{4}
+$$
+
+<CalculadoraViga />
+
+Observa qué pasa con el factor de seguridad si duplicas la altura $h$: el esfuerzo baja a la cuarta parte, porque $\sigma_{max} \propto 1/h^{2}$. Por eso las vigas son más altas que anchas.
+
+## Supuestos
+
+- Material homogéneo, isótropo y elástico lineal.
+- Secciones planas permanecen planas (hipótesis de Euler-Bernoulli).
+- Deformaciones pequeñas y viga esbelta ($L \gg h$).

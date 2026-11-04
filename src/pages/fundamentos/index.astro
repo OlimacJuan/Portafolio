@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Estante from '../../components/Estante.astro';
+
+const estantes = [
+  'Mecánica de sólidos',
+  'Diseño de máquinas',
+  'Termofluidos',
+  'Dinámica y vibraciones',
+  'Materiales y manufactura',
+] as const;
+const libros = (await getCollection('fundamentos')).sort((a, b) => a.data.orden - b.data.orden || a.data.titulo.localeCompare(b.data.titulo));
+const porEstante = estantes
+  .map((nombre) => ({ nombre, libros: libros.filter((l) => l.data.estante === nombre) }))
+  .filter((e) => e.libros.length > 0);
+---
+
+<Base titulo="Fundamentos" descripcion="Fundamentos teóricos de ingeniería mecánica con ecuaciones explicadas y calculadoras interactivas.">
+  <div class="interior">
+    <header class="encabezado">
+      <h1>Fundamentos</h1>
+      <p>
+        La teoría que sostiene los proyectos, organizada como una biblioteca. Toma un libro para leer el tema con sus
+        ecuaciones y ejemplos. Los lomos desvanecidos son temas en preparación.
+      </p>
+    </header>
+    <div class="biblioteca">
+      {porEstante.map((e) => <Estante nombre={e.nombre} libros={e.libros} />)}
+    </div>
+  </div>
+</Base>
+
+<style>
+  .interior {
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 3rem 1rem 5rem;
+  }
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .encabezado p {
+    margin-top: 1rem;
+    max-width: 56ch;
+    line-height: 1.55;
+    color: var(--color-texto-2);
+  }
+  .biblioteca {
+    margin-top: 2.5rem;
+    background: var(--color-fondo-2);
+    border-radius: 6px;
+    display: grid;
+    gap: 2rem 1.5rem;
+    padding: 0.5rem 1.25rem 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.04);
+  }
+</style>

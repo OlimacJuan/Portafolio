@@ -1,0 +1,28 @@
+---
+titulo: VDI 2221
+resumen: Diseño sistemático en fases, de la necesidad a la documentación, con revisión al final de cada fase.
+orden: 10
+ejemplo: true
+---
+
+## Para qué sirve
+
+La guía VDI 2221 de la Asociación de Ingenieros Alemanes ordena el diseño en fases. Cada fase produce un resultado concreto que se revisa antes de seguir, lo que evita saltar a la solución antes de entender el problema.
+
+## Las fases
+
+```mermaid
+flowchart TB
+  N([Necesidad]) --> R[Fase 1: Aclarar la tarea<br/>Lista de requisitos]
+  R --> F[Fase 2: Funciones y su estructura]
+  F --> P[Fase 3: Principios de solución<br/>Matriz morfológica]
+  P --> M[Fase 4: Módulos realizables]
+  M --> D[Fase 5: Diseño de los módulos principales]
+  D --> T[Fase 6: Diseño completo]
+  T --> I[Fase 7: Documentación<br/>Planos y especificaciones]
+  I -.->|Revisión| R
+```
+
+## Cómo la apliqué
+
+En el [soporte para motor](../../proyectos/ejemplo-soporte-motor/) usé las fases 1 a 3 para comparar tres geometrías antes de modelar en CAD.

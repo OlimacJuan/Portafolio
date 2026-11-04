@@ -1,0 +1,289 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PostIt from '../components/PostIt.astro';
+import PostItVacio from '../components/PostItVacio.astro';
+import { sitio, url } from '../config';
+
+const proyectos = (await getCollection('proyectos')).sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf());
+const destacados = [...proyectos.filter((p) => p.data.destacado), ...proyectos.filter((p) => !p.data.destacado)].slice(0, 3);
+const vacios = Math.max(0, 3 - destacados.length);
+
+const secciones = [
+  {
+    href: '/proyectos/',
+    titulo: 'Proyectos',
+    texto: 'Del problema al prototipo: requisitos, alternativas, cálculos, simulaciones y resultados de cada proyecto.',
+  },
+  {
+    href: '/metodologias/',
+    titulo: 'Metodologías de diseño',
+    texto: 'Cómo abordo un diseño: VDI 2221, matriz morfológica, QFD, AMEF y dónde apliqué cada una.',
+  },
+  {
+    href: '/fundamentos/',
+    titulo: 'Fundamentos teóricos',
+    texto: 'La teoría detrás de los proyectos, con ecuaciones explicadas paso a paso y calculadoras para experimentar.',
+  },
+];
+---
+
+<Base>
+  <section class="hero blueprint">
+    <div class="hero-interior">
+      <div class="hero-texto">
+        <h1>{sitio.nombre}</h1>
+        <p class="lema">
+          {sitio.titulo}{sitio.universidad && `, ${sitio.universidad}`}. Diseño, análisis y fabricación de sistemas
+          mecánicos, explicados paso a paso.
+        </p>
+        <div class="acciones">
+          <a class="boton boton-primario" href={url('/proyectos/')}>Ver proyectos</a>
+          <a class="boton boton-secundario" href={url('/fundamentos/')}>Explorar fundamentos</a>
+        </div>
+      </div>
+
+      <svg class="plano" viewBox="0 0 520 300" role="img" aria-label="Dibujo técnico de un eje escalonado con sus cotas">
+        <g class="trazo" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+          <path pathLength="1" d="M40 125h70v-25h170v-15h90v15h70v25h40v50h-40v25h-70v15h-90v-15H110v-25H40z" />
+          <path pathLength="1" d="M110 100v100M280 85v130M370 85v130M440 125v50" stroke-width="1" />
+          <path pathLength="1" d="M300 85h50v-8h-50z" stroke-width="1" />
+        </g>
+        <g class="cota" fill="none" stroke-width="1">
+          <path pathLength="1" class="eje" d="M20 150h460" />
+          <path pathLength="1" d="M40 235v28M110 220v43M280 220v43M370 230v33M440 205v58M480 185v78" />
+          <path pathLength="1" d="M40 255h70M110 255h170M280 255h90M370 255h70M440 255h40" />
+          <path pathLength="1" d="M60 100v-40M60 200v40" />
+        </g>
+        <g class="rotulos" fill="currentColor" font-size="12" text-anchor="middle">
+          <text x="75" y="248">30</text>
+          <text x="195" y="248">85</text>
+          <text x="325" y="248">45</text>
+          <text x="405" y="248">35</text>
+          <text x="460" y="248">20</text>
+          <text x="196" y="72">Ø40 h6</text>
+          <text x="325" y="72">chavetero</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <section class="destacados blueprint" aria-labelledby="t-destacados">
+    <div class="interior">
+      <h2 id="t-destacados">Proyectos recientes</h2>
+      <div class="tablero">
+        {destacados.map((p, i) => <PostIt proyecto={p} indice={i} />)}
+        {Array.from({ length: vacios }, (_, i) => <PostItVacio indice={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="indice" aria-label="Secciones del portafolio">
+    <ul class="interior">
+      {
+        secciones.map((s) => (
+          <li>
+            <a href={url(s.href)}>
+              <span class="indice-titulo">{s.titulo}</span>
+              <span class="indice-texto">{s.texto}</span>
+              <svg class="flecha" aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    border-bottom: 1px solid var(--blueprint-linea-fuerte);
+  }
+  .hero-interior {
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: clamp(3rem, 8vw, 6.5rem) 1rem clamp(3rem, 7vw, 5.5rem);
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .hero-interior {
+      grid-template-columns: 1.05fr 1fr;
+    }
+  }
+  h1 {
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+  .lema {
+    margin-top: 1.25rem;
+    font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+    line-height: 1.55;
+    max-width: 38ch;
+    color: color-mix(in oklab, white 82%, var(--color-cian));
+  }
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .boton {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.7rem 1.15rem;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      transform 160ms var(--ease-out-fuerte),
+      background-color 160ms ease;
+  }
+  .boton:active {
+    transform: scale(0.97);
+  }
+  .boton-primario,
+  .boton-primario:visited {
+    background: var(--color-amarillo);
+    color: var(--color-texto);
+  }
+  .boton-primario:hover {
+    background: color-mix(in oklab, var(--color-amarillo) 85%, white);
+  }
+  .boton-secundario,
+  .boton-secundario:visited {
+    color: #fff;
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-cian) 70%, white);
+  }
+  .boton-secundario:hover {
+    background: rgb(255 255 255 / 0.06);
+  }
+
+  /* Dibujo técnico que se traza una sola vez al cargar */
+  .plano {
+    width: 100%;
+    max-width: 560px;
+    justify-self: center;
+    color: color-mix(in oklab, white 88%, var(--color-cian));
+  }
+  .plano path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: trazar 1.6s var(--ease-out-fuerte) forwards;
+  }
+  .cota {
+    stroke: var(--color-cian);
+  }
+  .cota path {
+    animation-delay: 0.7s;
+  }
+  .cota .eje {
+    stroke-dasharray: 0.03 0.012 0.004 0.012;
+    stroke-dashoffset: 0;
+    animation: aparecer 0.6s ease 0.5s both;
+  }
+  .rotulos {
+    fill: var(--color-cian);
+    font-family: var(--font-mono);
+    animation: aparecer 0.6s ease 1.4s both;
+  }
+  @keyframes trazar {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes aparecer {
+    from {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .plano path {
+      stroke-dashoffset: 0;
+      animation: none;
+    }
+    .cota .eje {
+      stroke-dasharray: 0.03 0.012 0.004 0.012;
+    }
+  }
+
+  .destacados {
+    background-color: color-mix(in oklab, var(--color-marino) 92%, black);
+  }
+  .interior {
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 3.5rem 1rem 4.5rem;
+  }
+  .destacados h2 {
+    font-size: 1.5rem;
+    font-weight: 650;
+  }
+  .tablero {
+    margin-top: 2.5rem;
+    display: grid;
+    gap: 2.75rem 2.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  }
+
+  .indice ul {
+    display: grid;
+    padding-top: 2.5rem;
+    padding-bottom: 3.5rem;
+  }
+  .indice li + li {
+    border-top: 1px solid var(--color-fondo-2);
+  }
+  .indice a {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.35rem 2rem;
+    padding: 1.6rem 0;
+    text-decoration: none;
+    color: var(--color-texto);
+  }
+  @media (min-width: 800px) {
+    .indice a {
+      grid-template-columns: 18rem 1fr auto;
+      align-items: baseline;
+    }
+  }
+  .indice-titulo {
+    font-size: 1.4rem;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+  }
+  .indice-texto {
+    color: var(--color-texto-2);
+    line-height: 1.55;
+    max-width: 60ch;
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  @media (min-width: 800px) {
+    .indice-texto {
+      grid-column: auto;
+      grid-row: auto;
+    }
+  }
+  .flecha {
+    align-self: center;
+    color: var(--color-texto-2);
+    transition: transform 200ms var(--ease-out-fuerte);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .indice a:hover .flecha {
+      transform: translateX(6px);
+      color: var(--color-texto);
+    }
+    .indice a:hover .indice-titulo {
+      text-decoration: underline;
+      text-decoration-color: var(--color-amarillo);
+      text-decoration-thickness: 3px;
+      text-underline-offset: 0.25em;
+    }
+  }
+</style>

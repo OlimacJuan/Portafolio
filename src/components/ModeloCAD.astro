@@ -1,0 +1,64 @@
+---
+// Visor 3D: el visitante puede rotar y hacer zoom a un modelo .glb.
+// Uso en un .mdx:  <ModeloCAD src="/modelos/mi-pieza.glb" alt="Ensamble del reductor" />
+// El archivo .glb va en la carpeta public/modelos/.
+import { url } from '../config';
+interface Props {
+  src: string;
+  alt: string;
+  poster?: string;
+}
+const { src, alt, poster } = Astro.props;
+---
+
+<figure class="modelo">
+  <model-viewer
+    src={url(src)}
+    alt={alt}
+    poster={poster ? url(poster) : undefined}
+    camera-controls
+    touch-action="pan-y"
+    shadow-intensity="0.6"
+    exposure="1"
+    loading="lazy"
+    reveal="interaction"
+  >
+    <button slot="poster" class="cargar" type="button">Ver modelo 3D</button>
+  </model-viewer>
+  <figcaption>{alt}. Arrastra para rotar, rueda o pellizca para acercar.</figcaption>
+</figure>
+
+<script>
+  // Carga la librería solo si la página tiene un modelo 3D.
+  if (document.querySelector('model-viewer')) import('@google/model-viewer');
+</script>
+
+<style>
+  .modelo model-viewer {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--color-fondo-2);
+    border-radius: 8px;
+    --poster-color: transparent;
+  }
+  .cargar {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: fit-content;
+    height: fit-content;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    border: 0;
+    background: var(--color-marino);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .modelo figcaption {
+    font-size: 0.9rem;
+    color: var(--color-texto-2);
+    margin-top: 0.5rem;
+  }
+</style>

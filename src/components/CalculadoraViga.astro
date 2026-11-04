@@ -1,0 +1,143 @@
+---
+// Calculadora interactiva: viga simplemente apoyada con carga puntual en el centro
+// y sección rectangular. Se usa dentro de un archivo .mdx así:
+//   <CalculadoraViga />
+---
+
+<figure class="calc" data-calc-viga>
+  <figcaption class="calc-titulo">Prueba tú: viga con carga en el centro</figcaption>
+  <div class="calc-cuerpo">
+    <div class="entradas">
+      <label><span>Carga P</span> <span class="u">N</span><input type="number" name="P" value="2000" min="0" step="100" inputmode="decimal" /></label>
+      <label><span>Luz L</span> <span class="u">m</span><input type="number" name="L" value="1.2" min="0.01" step="0.1" inputmode="decimal" /></label>
+      <label><span>Base b</span> <span class="u">mm</span><input type="number" name="b" value="30" min="1" step="1" inputmode="decimal" /></label>
+      <label><span>Altura h</span> <span class="u">mm</span><input type="number" name="h" value="50" min="1" step="1" inputmode="decimal" /></label>
+      <label><span>Fluencia S<sub>y</sub></span> <span class="u">MPa</span><input type="number" name="Sy" value="250" min="1" step="5" inputmode="decimal" /></label>
+    </div>
+    <dl class="salidas" aria-live="polite">
+      <div><dt>Momento máximo M</dt><dd data-out="M">–</dd></div>
+      <div><dt>Inercia I</dt><dd data-out="I">–</dd></div>
+      <div><dt>Esfuerzo máximo σ</dt><dd data-out="s">–</dd></div>
+      <div class="fs"><dt>Factor de seguridad n</dt><dd data-out="n">–</dd></div>
+    </dl>
+  </div>
+  <p class="nota">Ejercicio académico: no considera concentradores de esfuerzo, pandeo lateral ni fatiga.</p>
+</figure>
+
+<script>
+  const fmt = (x: number, d = 2) =>
+    Number.isFinite(x) ? x.toLocaleString('es-CO', { maximumFractionDigits: d, minimumFractionDigits: 0 }) : '–';
+
+  document.querySelectorAll<HTMLElement>('[data-calc-viga]').forEach((raiz) => {
+    const val = (n: string) => parseFloat((raiz.querySelector(`input[name="${n}"]`) as HTMLInputElement).value);
+    const out = (k: string) => raiz.querySelector(`[data-out="${k}"]`) as HTMLElement;
+    const calcular = () => {
+      const P = val('P'), L = val('L'), b = val('b') / 1000, h = val('h') / 1000, Sy = val('Sy');
+      const M = (P * L) / 4; // N·m
+      const I = (b * h ** 3) / 12; // m^4
+      const s = (M * (h / 2)) / I / 1e6; // MPa
+      const n = Sy / s;
+      out('M').textContent = `${fmt(M)} N·m`;
+      out('I').textContent = `${fmt(I * 1e12 / 1e4, 1)} cm⁴`;
+      out('s').textContent = `${fmt(s, 1)} MPa`;
+      out('n').textContent = fmt(n, 2);
+      const fs = raiz.querySelector('.fs') as HTMLElement;
+      fs.dataset.estado = !Number.isFinite(n) ? '' : n < 1 ? 'falla' : n < 2 ? 'justo' : 'ok';
+    };
+    raiz.addEventListener('input', calcular);
+    calcular();
+  });
+</script>
+
+<style>
+  .calc {
+    border: 1px solid var(--color-fondo-2);
+    border-radius: 10px;
+    padding: 1.25rem;
+    background: color-mix(in oklab, var(--color-fondo-2) 30%, white);
+  }
+  .calc-titulo {
+    font-weight: 650;
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+  }
+  .calc-cuerpo {
+    display: grid;
+    gap: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .calc-cuerpo {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .entradas {
+    display: grid;
+    gap: 0.6rem;
+  }
+  .entradas label {
+    display: grid;
+    grid-template-columns: 1fr auto 7rem;
+  }
+  .entradas label > span:first-child {
+    min-width: 0;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+  }
+  .u {
+    font-size: 0.8rem;
+    color: var(--color-texto-2);
+  }
+  .entradas input {
+    font: inherit;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    width: 100%;
+    padding: 0.35rem 0.5rem;
+    border: 1px solid var(--color-gris);
+    border-radius: 6px;
+    background: #fff;
+    text-align: right;
+  }
+  .salidas {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+  }
+  .salidas div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--color-fondo-2);
+  }
+  .salidas dt {
+    color: var(--color-texto-2);
+    font-size: 0.95rem;
+  }
+  .salidas dd {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-weight: 400;
+  }
+  .fs dd {
+    font-weight: 600;
+    padding: 0 0.4rem;
+    border-radius: 4px;
+    transition: background-color 200ms ease;
+  }
+  .fs[data-estado='ok'] dd {
+    background: color-mix(in oklab, var(--color-verde) 30%, white);
+  }
+  .fs[data-estado='justo'] dd {
+    background: color-mix(in oklab, var(--color-amarillo) 45%, white);
+  }
+  .fs[data-estado='falla'] dd {
+    background: #f4c7c3;
+  }
+  .nota {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--color-texto-2);
+  }
+</style>

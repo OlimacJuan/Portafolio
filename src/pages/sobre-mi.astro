@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import { sitio, url } from '../config';
+---
+<Base titulo="Sobre mí">
+  <div class="interior">
+    <h1>Sobre mí</h1>
+    <p class="texto">
+      Soy {sitio.nombre}, {sitio.titulo.toLowerCase()}{sitio.universidad && ` en ${sitio.universidad}`}. Esta sección
+      está en preparación: pronto encontrarás aquí mi formación, mis herramientas de trabajo y mi hoja de vida.
+    </p>
+    <p class="texto">Mientras tanto, puedes ver mis <a href={url('/proyectos/')}>proyectos</a>.</p>
+  </div>
+</Base>
+<style>
+  .interior { max-width: 76rem; margin: 0 auto; padding: 3rem 1rem 6rem; }
+  h1 { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+  .texto { margin-top: 1.25rem; max-width: 60ch; font-size: 1.1rem; line-height: 1.6; color: var(--color-texto-2); }
+</style>
