@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../config';
+---
+<Base titulo="Página no encontrada">
+  <div class="interior">
+    <h1>Esta pieza no está en el plano</h1>
+    <p>La página que buscas no existe o cambió de lugar. <a href={url('/')}>Volver al inicio</a>.</p>
+  </div>
+</Base>
+<style>
+  .interior { max-width: 76rem; margin: 0 auto; padding: 5rem 1rem 8rem; }
+  h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; letter-spacing: -0.03em; max-width: 18ch; }
+  p { margin-top: 1rem; color: var(--color-texto-2); }
+</style>

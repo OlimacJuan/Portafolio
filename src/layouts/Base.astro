@@ -1,0 +1,200 @@
+---
+import '../styles/global.css';
+import { sitio, url } from '../config';
+
+interface Props {
+  titulo?: string;
+  descripcion?: string;
+}
+
+const { titulo, descripcion = `${sitio.nombre}, ${sitio.titulo.toLowerCase()}. Proyectos, metodologías de diseño y fundamentos de ingeniería explicados paso a paso.` } = Astro.props;
+const tituloCompleto = titulo ? `${titulo} · ${sitio.nombre}` : `${sitio.nombre} · Portafolio de Ingeniería Mecánica`;
+const ruta = Astro.url.pathname;
+
+const enlaces = [
+  { href: '/proyectos/', texto: 'Proyectos' },
+  { href: '/metodologias/', texto: 'Metodologías' },
+  { href: '/fundamentos/', texto: 'Fundamentos' },
+  { href: '/sobre-mi/', texto: 'Sobre mí' },
+  { href: '/contacto/', texto: 'Contacto' },
+];
+const activo = (href: string) => ruta.startsWith(url(href).replace(/\/$/, ''));
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descripcion} />
+    <meta property="og:title" content={tituloCompleto} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#2B273F" />
+    <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+  </head>
+  <body>
+    <a href="#contenido" class="saltar">Saltar al contenido</a>
+    <header class="cabecera">
+      <div class="cabecera-interior">
+        <a href={url('/')} class="marca" aria-label="Inicio">
+          <span class="marca-nombre">{sitio.nombre}</span>
+          <span class="marca-sub">{sitio.titulo}</span>
+        </a>
+        <nav aria-label="Principal">
+          <ul class="menu">
+            {
+              enlaces.map((e) => (
+                <li>
+                  <a href={url(e.href)} aria-current={activo(e.href) ? 'page' : undefined}>
+                    {e.texto}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <footer class="pie">
+      <div class="pie-interior">
+        <p>
+          © {new Date().getFullYear()} {sitio.nombre}. Contenido bajo licencia{' '}
+          <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es" rel="license">CC BY-NC-ND 4.0</a>, salvo
+          que se indique otra cosa.
+        </p>
+        <p>
+          Los cálculos y diseños aquí publicados son trabajos académicos de un estudiante; no son diseños validados para
+          construcción ni constituyen ejercicio profesional de la ingeniería.
+        </p>
+        <p><a href={url('/legal/')}>Aviso legal y tratamiento de datos</a></p>
+      </div>
+    </footer>
+
+    <script>
+      // Dibuja los diagramas Mermaid solo en las páginas que los tienen.
+      const bloques = document.querySelectorAll('pre.mermaid');
+      if (bloques.length) {
+        import('mermaid').then(async ({ default: mermaid }) => {
+          mermaid.initialize({
+            startOnLoad: false,
+            theme: 'base',
+            fontFamily: 'IBM Plex Sans Variable, system-ui, sans-serif',
+            themeVariables: {
+              primaryColor: '#ffffff',
+              primaryBorderColor: '#2B273F',
+              primaryTextColor: '#000000',
+              secondaryColor: '#E7E6E6',
+              tertiaryColor: '#ffffff',
+              lineColor: '#44546A',
+              clusterBkg: '#f4f4f3',
+              clusterBorder: '#A5A5A5',
+              fontSize: '15px',
+            },
+            flowchart: { curve: 'basis', htmlLabels: true },
+          });
+          await mermaid.run({ nodes: bloques as NodeListOf<HTMLElement> });
+        });
+      }
+    </script>
+  </body>
+</html>
+
+<style>
+  .saltar {
+    position: absolute;
+    left: 1rem;
+    top: -3rem;
+    background: var(--color-amarillo);
+    color: var(--color-texto);
+    padding: 0.5rem 0.8rem;
+    z-index: 50;
+    transition: top 160ms var(--ease-out-fuerte);
+  }
+  .saltar:focus {
+    top: 1rem;
+  }
+  .cabecera {
+    background: var(--color-fondo);
+    border-bottom: 1px solid var(--color-fondo-2);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  .cabecera-interior {
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .marca {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: var(--color-texto);
+    line-height: 1.15;
+  }
+  .marca:visited {
+    color: var(--color-texto);
+  }
+  .marca-nombre {
+    font-weight: 650;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+  }
+  .marca-sub {
+    font-size: 0.8rem;
+    color: var(--color-texto-2);
+  }
+  .menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    font-size: 0.95rem;
+  }
+  .menu a {
+    color: var(--color-texto-2);
+    text-decoration: none;
+    padding: 0.25rem 0;
+    border-bottom: 2px solid transparent;
+    transition:
+      color 160ms ease,
+      border-color 160ms ease;
+  }
+  .menu a:hover,
+  .menu a[aria-current='page'] {
+    color: var(--color-texto);
+    border-bottom-color: var(--color-amarillo);
+  }
+  main {
+    flex: 1;
+  }
+  .pie {
+    background: var(--color-fondo-2);
+    color: var(--color-texto-2);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+  .pie-interior {
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 2rem 1rem 2.5rem;
+    display: grid;
+    gap: 0.6rem;
+    max-inline-size: 76rem;
+  }
+  .pie p {
+    max-width: 75ch;
+  }
+</style>

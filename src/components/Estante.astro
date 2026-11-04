@@ -1,0 +1,183 @@
+---
+// Un estante de la biblioteca: libros verticales con el título en el lomo.
+import type { CollectionEntry } from 'astro:content';
+import { url } from '../config';
+
+interface Props {
+  nombre: string;
+  libros: CollectionEntry<'fundamentos'>[];
+}
+const { nombre, libros } = Astro.props;
+
+// Medidas deterministas por título: cada libro tiene su altura y grosor.
+function medidas(titulo: string) {
+  let h = 0;
+  for (const c of titulo) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  const alto = 12.5 + (h % 5) * 0.75; // rem
+  const ancho = Math.max(2.9, Math.min(4.4, 2.2 + titulo.length * 0.07)); // rem
+  return { alto, ancho, banda: h % 3 };
+}
+const idEstante = `estante-${nombre.toLowerCase().normalize('NFD').replace(/[^a-z]+/g, '-')}`;
+---
+
+<section class="estante" aria-labelledby={idEstante}>
+  <h2 id={idEstante} class="rotulo">{nombre}</h2>
+  <ul class="libros">
+    {
+      libros.map((libro) => {
+        const m = medidas(libro.data.titulo);
+        const estilo = `--alto:${m.alto}rem;--ancho:${m.ancho}rem`;
+        const clases = ['libro', `lomo-${libro.data.lomo}`, `banda-${m.banda}`];
+        return (
+          <li>
+            {libro.data.borrador ? (
+              <span class:list={[...clases, 'borrador']} style={estilo} title="En preparación">
+                <span class="texto">{libro.data.titulo}</span>
+                <span class="visually-hidden"> (en preparación)</span>
+              </span>
+            ) : (
+              <a href={url(`/fundamentos/${libro.id}/`)} class:list={clases} style={estilo}>
+                <span class="texto">{libro.data.titulo}</span>
+              </a>
+            )}
+          </li>
+        );
+      })
+    }
+  </ul>
+  <div class="tabla" aria-hidden="true"></div>
+</section>
+
+<style>
+  .estante {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1.25rem 0;
+  }
+  .rotulo {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--color-texto-2);
+    margin-bottom: 0.75rem;
+  }
+  .libros {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    gap: 3px;
+    flex: 1;
+    min-height: 16rem;
+    overflow-x: auto;
+    padding-top: 1rem;
+    scrollbar-width: thin;
+  }
+  .libro {
+    --tinta: #fff;
+    --color: var(--color-marino);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--alto);
+    width: var(--ancho);
+    background: var(--color);
+    color: var(--tinta);
+    text-decoration: none;
+    border-radius: 3px 3px 1px 1px;
+    box-shadow:
+      inset 3px 0 0 rgb(255 255 255 / 0.14),
+      inset -4px 0 0 rgb(0 0 0 / 0.16);
+    transition: transform 240ms var(--ease-out-fuerte);
+  }
+  .libro:visited {
+    color: var(--tinta);
+  }
+  /* Bandas decorativas del lomo */
+  .libro::before,
+  .libro::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: rgb(255 255 255 / 0.35);
+  }
+  .libro::before {
+    top: 0.9rem;
+  }
+  .libro::after {
+    bottom: 0.9rem;
+  }
+  .banda-1::before,
+  .banda-1::after {
+    height: 6px;
+    background: rgb(0 0 0 / 0.15);
+  }
+  .banda-2::before {
+    top: 1.4rem;
+    box-shadow: 0 5px 0 rgb(255 255 255 / 0.35);
+  }
+  .texto {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 0.86rem;
+    font-weight: 600;
+    line-height: 1.15;
+    max-height: calc(var(--alto) - 3.4rem);
+    overflow: hidden;
+    text-align: center;
+    padding: 0 0.35rem;
+  }
+  .lomo-marino {
+    --color: var(--color-marino);
+  }
+  .lomo-azul {
+    --color: var(--color-azul);
+  }
+  .lomo-cian {
+    --color: var(--color-cian);
+    --tinta: #000;
+  }
+  .lomo-amarillo {
+    --color: var(--color-amarillo);
+    --tinta: #000;
+  }
+  .lomo-verde {
+    --color: var(--color-verde);
+    --tinta: #000;
+  }
+  .lomo-gris {
+    --color: var(--color-gris);
+    --tinta: #000;
+  }
+  /* Temas en preparación: el mismo lomo, desvanecido */
+  .borrador {
+    opacity: 0.42;
+    filter: saturate(0.6);
+  }
+  a.libro:active {
+    transform: translateY(-6px) scale(0.98);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    a.libro:hover {
+      transform: translateY(-12px);
+    }
+  }
+  .tabla {
+    height: 0.9rem;
+    margin: 0 -0.5rem;
+    background: var(--color-marino);
+    box-shadow: 0 8px 14px -6px rgb(0 0 0 / 0.35);
+    border-top: 2px solid color-mix(in oklab, var(--color-marino) 70%, white);
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

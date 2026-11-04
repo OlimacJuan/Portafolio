@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import { sitio } from '../config';
+---
+<Base titulo="Aviso legal y tratamiento de datos">
+  <article class="interior prosa">
+    <h1>Aviso legal y tratamiento de datos</h1>
+
+    <h2>Derechos de autor</h2>
+    <p>
+      Los textos, imágenes, modelos y cálculos de este sitio son obra de {sitio.nombre}, salvo que se indique otro
+      autor. Se publican bajo la licencia
+      <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">Creative Commons Atribución-NoComercial-SinDerivadas 4.0</a>:
+      puedes compartirlos citando al autor, sin fines comerciales y sin modificarlos. Los derechos morales del autor se
+      reservan conforme a la Ley 23 de 1982 y la Decisión Andina 351 de 1993.
+    </p>
+    <p>
+      En los proyectos hechos en equipo se nombra a cada integrante y su aporte, y se publican con su autorización.
+      Las figuras o datos de terceros se citan con su fuente. Los proyectos académicos se publican conforme al
+      reglamento de propiedad intelectual de la institución correspondiente.
+    </p>
+    <p>
+      El código fuente del sitio está bajo licencia MIT. Usa bibliotecas de terceros con sus propias licencias,
+      entre ellas Astro, KaTeX, Mermaid y model-viewer.
+    </p>
+
+    <h2>Ejercicio de la ingeniería</h2>
+    <p>
+      El autor es estudiante de Ingeniería Mecánica y no cuenta aún con matrícula profesional. El contenido de este sitio
+      es académico y formativo; no constituye oferta de servicios profesionales ni diseños validados para su construcción
+      o uso, en los términos de la Ley 842 de 2003.
+    </p>
+
+    <h2>Tratamiento de datos personales</h2>
+    <p>
+      Este sitio no tiene formularios, no usa cookies propias ni herramientas de analítica, y no recolecta datos de
+      quienes lo visitan. El sitio se aloja en GitHub Pages, que puede registrar datos técnicos de acceso según su propia
+      política de privacidad.
+    </p>
+    <p>
+      Si escribes al correo de contacto, {sitio.nombre} usará tu nombre y correo únicamente para responderte, conforme a
+      la Ley 1581 de 2012. Puedes pedir en cualquier momento conocer, actualizar, rectificar o eliminar tus datos
+      escribiendo a ese mismo correo.
+    </p>
+  </article>
+</Base>
+<style>
+  .interior { max-width: 76rem; margin: 0 auto; padding: 3rem 1rem 6rem; }
+  h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; max-width: 20ch; }
+</style>
