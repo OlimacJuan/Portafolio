@@ -61,18 +61,23 @@ const vacios = Math.max(0, 3 - destacados.length);
       <a class="ver-todos" href={url('/proyectos/')}>Ver todos los proyectos</a>
 
       <h2 class="visually-hidden">Conocimiento</h2>
-      <div class="saber-grid">
-      <div class="estante-solo">
-        <a class="libro-grande" href={url('/conocimiento/')} aria-describedby="d-conocimiento">
-          <span class="lomo-texto" id="t-conocimiento">Conocimiento</span>
+      <div class="mesa">
+        <a class="portada" href={url('/conocimiento/')} aria-label="Conocimiento: metodologías de diseño y fundamentos teóricos">
+          <span class="lomo-borde" aria-hidden="true"></span>
+          <span class="tapa">
+            <svg class="cover-dibujo" viewBox="0 0 120 120" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4">
+              <circle cx="60" cy="60" r="44" />
+              <circle cx="60" cy="60" r="26" />
+              <circle cx="60" cy="60" r="5" />
+              <path d="M8 60h104M60 8v104" stroke-width="0.8" stroke-dasharray="6 3 1.5 3" />
+              <path d="M60 60l31-31" />
+            </svg>
+            <span class="cover-titulo">Conocimiento</span>
+            <span class="cover-sub">Metodologías de diseño<br />y fundamentos teóricos</span>
+          </span>
+          <span class="paginas" aria-hidden="true"></span>
         </a>
-        <span class="repisa" aria-hidden="true"></span>
       </div>
-      <p class="saber-texto" id="d-conocimiento">
-        Metodologías de diseño y fundamentos teóricos, con ecuaciones explicadas paso a paso y calculadoras para
-        experimentar. Toma el libro para entrar a la biblioteca.
-      </p>
-    </div>
     </div>
   </section>
 
@@ -234,90 +239,93 @@ const vacios = Math.max(0, 3 - destacados.length);
     clip-path: inset(50%);
     white-space: nowrap;
   }
-  .saber-grid {
+  /* Libro "Conocimiento": portada vista de frente sobre el plano */
+  .mesa {
     display: grid;
-    gap: 2rem 3.5rem;
-    align-items: end;
-    margin-top: 4rem;
+    place-items: center;
+    margin-top: 4.5rem;
+    padding-bottom: 0.5rem;
   }
-  @media (min-width: 720px) {
-    .saber-grid {
-      grid-template-columns: auto 1fr;
-    }
-  }
-  .estante-solo {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: fit-content;
-  }
-  .libro-grande {
+  .portada {
+    --ancho: min(19rem, 78vw);
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 1.5rem;
-    width: 4.75rem;
-    height: 19rem;
-    background: var(--color-amarillo);
+    display: block;
+    width: var(--ancho);
+    aspect-ratio: 3 / 4;
     color: var(--color-texto);
     text-decoration: none;
-    border-radius: 4px 4px 1px 1px;
-    box-shadow:
-      inset 4px 0 0 rgb(255 255 255 / 0.25),
-      inset -6px 0 0 rgb(0 0 0 / 0.14),
-      0 18px 30px -14px rgb(0 0 0 / 0.7);
-    transition: transform 260ms var(--ease-out-fuerte);
+    transform: rotate(-1.4deg);
+    transition: transform 280ms var(--ease-out-fuerte);
+    filter: drop-shadow(0 26px 22px rgb(0 0 0 / 0.55)) drop-shadow(0 4px 4px rgb(0 0 0 / 0.35));
   }
-  .libro-grande:visited {
+  .portada:visited {
     color: var(--color-texto);
   }
-  .libro-grande::before,
-  .libro-grande::after {
+  .tapa {
+    position: absolute;
+    inset: 0 0.55rem 0 0.9rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2.1rem 1.5rem 1.8rem;
+    background: var(--color-amarillo);
+    border-radius: 2px 6px 6px 2px;
+    box-shadow:
+      inset 0 0 0 1px rgb(0 0 0 / 0.1),
+      inset 8px 0 14px -8px rgb(0 0 0 / 0.35);
+  }
+  /* Marco fino impreso en la portada */
+  .tapa::before {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
-    height: 7px;
-    background: var(--color-marino);
-    opacity: 0.85;
+    inset: 0.8rem 0.8rem 0.8rem 1.1rem;
+    border: 1.5px solid var(--color-marino);
+    border-radius: 1px;
+    pointer-events: none;
   }
-  .libro-grande::before {
-    top: 1.4rem;
-    box-shadow: 0 12px 0 -4px var(--color-marino);
+  .lomo-borde {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 1.4rem;
+    background: color-mix(in oklab, var(--color-amarillo) 78%, black);
+    border-radius: 4px 0 0 4px;
+    box-shadow: inset -3px 0 0 rgb(0 0 0 / 0.18), inset 2px 0 0 rgb(255 255 255 / 0.25);
   }
-  .libro-grande::after {
-    bottom: 1.4rem;
-    box-shadow: 0 -12px 0 -4px var(--color-marino);
+  .paginas {
+    position: absolute;
+    inset: 0.35rem 0 0.35rem auto;
+    width: 0.9rem;
+    background: repeating-linear-gradient(180deg, #fbfbf8 0 2px, #dcdbd6 2px 3px);
+    border-radius: 0 3px 3px 0;
+    z-index: -1;
   }
-  .lomo-texto {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    font-size: 1.55rem;
+  .cover-dibujo {
+    width: 7.5rem;
+    margin-top: 0.8rem;
+    color: var(--color-marino);
+  }
+  .cover-titulo {
+    margin-top: 1.6rem;
+    font-size: clamp(1.9rem, 5vw, 2.25rem);
     font-weight: 700;
-    letter-spacing: 0.01em;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--color-marino);
   }
-  .repisa {
-    display: block;
-    width: 13rem;
-    height: 0.8rem;
-    background: color-mix(in oklab, var(--color-cian) 55%, var(--color-marino));
-    border-top: 2px solid var(--color-cian);
-    box-shadow: 0 10px 16px -8px rgb(0 0 0 / 0.6);
+  .cover-sub {
+    margin-top: auto;
+    padding-bottom: 0.4rem;
+    text-align: center;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    color: var(--color-marino);
   }
-  .libro-grande:active {
-    transform: translateY(-8px) scale(0.98);
+  .portada:active {
+    transform: rotate(0deg) scale(0.98);
   }
   @media (hover: hover) and (pointer: fine) {
-    .libro-grande:hover {
-      transform: translateY(-16px);
+    .portada:hover {
+      transform: rotate(0deg) translateY(-8px);
     }
-  }
-  .saber-texto {
-    max-width: 42ch;
-    font-size: 1.15rem;
-    line-height: 1.6;
-    color: color-mix(in oklab, white 82%, var(--color-cian));
-    padding-bottom: 1.5rem;
   }
 </style>
