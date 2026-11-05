@@ -7,9 +7,11 @@ interface Props {
   descripcion?: string;
   /** Página sobre blueprint: el plano continúa detrás del pie flotante */
   plano?: boolean;
+  /** Ilustración de biblioteca sobre el blueprint (solo Conocimiento) */
+  biblioteca?: boolean;
 }
 
-const { plano = false, titulo, descripcion = `${sitio.nombre}, ${sitio.titulo.toLowerCase()}. Proyectos, metodologías de diseño y fundamentos de ingeniería explicados paso a paso.` } = Astro.props;
+const { plano = false, biblioteca = false, titulo, descripcion = `${sitio.nombre}, ${sitio.titulo.toLowerCase()}. Proyectos, metodologías de diseño y fundamentos de ingeniería explicados paso a paso.` } = Astro.props;
 const tituloCompleto = titulo ? `${titulo} · ${sitio.nombre}` : `${sitio.nombre} · Portafolio de Ingeniería Mecánica`;
 const ruta = Astro.url.pathname;
 
@@ -60,7 +62,7 @@ const activo = (href: string) => ruta.startsWith(url(href).replace(/\/$/, ''));
       </div>
     </header>
 
-    <div class:list={['cuerpo-pagina', { blueprint: plano }]}>
+    <div class:list={['cuerpo-pagina', { blueprint: plano, biblioteca }]} style={biblioteca ? `--ilustracion: url(${url('/fondo-biblioteca.svg')})` : undefined}>
     <main id="contenido">
       <slot />
     </main>
@@ -193,6 +195,27 @@ const activo = (href: string) => ruta.startsWith(url(href).replace(/\/$/, ''));
     flex: 1;
     display: flex;
     flex-direction: column;
+  }
+  .biblioteca {
+    background-image:
+      var(--ilustracion),
+      linear-gradient(var(--blueprint-linea-fuerte) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blueprint-linea-fuerte) 1px, transparent 1px),
+      linear-gradient(var(--blueprint-linea) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blueprint-linea) 1px, transparent 1px);
+    background-size:
+      100% auto,
+      120px 120px,
+      120px 120px,
+      24px 24px,
+      24px 24px;
+    background-position:
+      center bottom,
+      -1px -1px,
+      -1px -1px,
+      -1px -1px,
+      -1px -1px;
+    background-repeat: no-repeat, repeat, repeat, repeat, repeat;
   }
   main {
     flex: 1;
