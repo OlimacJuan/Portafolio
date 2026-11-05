@@ -120,22 +120,31 @@ const activo = (href: string) => ruta.startsWith(url(href).replace(/\/$/, ''));
   .saltar:focus {
     top: 1rem;
   }
+  /* Barra flotante: no ocupa espacio, queda sobre el inicio de la página y se va al desplazarse */
   .cabecera {
-    background: var(--color-fondo);
-    border-bottom: 1px solid var(--color-fondo-2);
-    position: sticky;
+    position: absolute;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 20;
+    padding: 0 1rem;
   }
   .cabecera-interior {
-    max-width: 76rem;
-    margin: 0 auto;
-    padding: 0.85rem 1rem;
+    max-width: 74rem;
+    margin: 0.75rem auto 0;
+    padding: 0.65rem 1.1rem;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem 2rem;
+    gap: 0.35rem 2rem;
     align-items: center;
     justify-content: space-between;
+    background: color-mix(in oklab, var(--color-fondo) 94%, transparent);
+    backdrop-filter: blur(10px);
+    border: 1px solid color-mix(in oklab, var(--color-fondo-2) 80%, transparent);
+    border-radius: 14px;
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.08),
+      0 12px 28px -12px rgb(0 0 0 / 0.35);
   }
   .marca {
     display: flex;
@@ -179,21 +188,26 @@ const activo = (href: string) => ruta.startsWith(url(href).replace(/\/$/, ''));
   main {
     flex: 1;
   }
+  /* Pie flotante: una tarjeta del mismo ancho que el contenido */
   .pie {
+    padding: 2rem 1rem 1rem;
+  }
+  .pie-interior {
+    max-width: 74rem;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 1.75rem;
+    display: grid;
+    gap: 0.6rem;
     background: var(--color-fondo-2);
     color: var(--color-texto-2);
     font-size: 0.875rem;
     line-height: 1.6;
-  }
-  .pie-interior {
-    max-width: 76rem;
-    margin: 0 auto;
-    padding: 2rem 1rem 2.5rem;
-    display: grid;
-    gap: 0.6rem;
-    max-inline-size: 76rem;
+    border-radius: 14px;
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.08),
+      0 12px 28px -12px rgb(0 0 0 / 0.35);
   }
   .pie p {
-    max-width: 75ch;
+    max-width: none;
   }
 </style>

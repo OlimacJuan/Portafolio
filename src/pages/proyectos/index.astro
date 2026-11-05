@@ -8,10 +8,6 @@ import { sitio } from '../../config';
 const proyectos = (await getCollection('proyectos')).sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf());
 const areas = [...new Set(proyectos.map((p) => p.data.area))];
 const vacios = Math.max(0, 3 - proyectos.length);
-const iniciales = sitio.nombre
-  .split(' ')
-  .map((p) => p[0])
-  .join('.');
 ---
 
 <Base titulo="Proyectos" descripcion="Proyectos de ingeniería mecánica: diseño, análisis, simulación y fabricación.">
@@ -47,14 +43,12 @@ const iniciales = sitio.nombre
           <tr>
             <th scope="row">Plano</th>
             <td>Índice de proyectos</td>
-            <th scope="row">Hoja</th>
-            <td>1 de 1</td>
+            <th scope="row">Proyectos</th>
+            <td>{proyectos.length}</td>
           </tr>
           <tr>
             <th scope="row">Dibujó</th>
-            <td>{iniciales}.</td>
-            <th scope="row">Proyectos</th>
-            <td>{proyectos.length}</td>
+            <td colspan="3">{sitio.nombre}</td>
           </tr>
         </tbody>
       </table>
@@ -81,7 +75,7 @@ const iniciales = sitio.nombre
   .interior {
     max-width: 76rem;
     margin: 0 auto;
-    padding: 3rem 1rem 3rem;
+    padding: calc(3rem + var(--alto-cabecera)) 1rem 3rem;
     display: flex;
     flex-direction: column;
   }
@@ -93,7 +87,6 @@ const iniciales = sitio.nombre
   }
   .encabezado p {
     margin-top: 1rem;
-    max-width: 52ch;
     line-height: 1.55;
     color: color-mix(in oklab, white 82%, var(--color-cian));
   }

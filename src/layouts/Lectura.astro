@@ -29,7 +29,7 @@ const { titulo, resumen, volver, ejemplo } = Astro.props;
   .lectura {
     max-width: 76rem;
     margin: 0 auto;
-    padding: 2.5rem 1rem 5rem;
+    padding: calc(2.5rem + var(--alto-cabecera)) 1rem 5rem;
   }
   .volver {
     font-size: 0.9rem;
