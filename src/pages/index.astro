@@ -11,8 +11,8 @@ const vacios = Math.max(0, 3 - destacados.length);
 
 ---
 
-<Base>
-  <section class="hero blueprint">
+<Base plano>
+  <section class="hero">
     <div class="hero-interior">
       <div class="hero-texto">
         <h1>{sitio.nombre}</h1>
@@ -51,7 +51,7 @@ const vacios = Math.max(0, 3 - destacados.length);
     </div>
   </section>
 
-  <section class="destacados blueprint" aria-label="Proyectos y conocimiento">
+  <section class="destacados" aria-label="Proyectos y conocimiento">
     <div class="interior">
       <h2 id="t-destacados">Proyectos recientes</h2>
       <div class="tablero">
@@ -200,7 +200,7 @@ const vacios = Math.max(0, 3 - destacados.length);
   }
 
   .destacados {
-    background-color: color-mix(in oklab, var(--color-marino) 92%, black);
+    background-color: rgb(0 0 0 / 0.08);
   }
   .interior {
     max-width: 76rem;

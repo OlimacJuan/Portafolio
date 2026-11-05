@@ -10,8 +10,8 @@ const areas = [...new Set(proyectos.map((p) => p.data.area))];
 const vacios = Math.max(0, 3 - proyectos.length);
 ---
 
-<Base titulo="Proyectos" descripcion="Proyectos de ingeniería mecánica: diseño, análisis, simulación y fabricación.">
-  <section class="plano blueprint">
+<Base plano titulo="Proyectos" descripcion="Proyectos de ingeniería mecánica: diseño, análisis, simulación y fabricación.">
+  <section class="plano">
     <div class="interior">
       <header class="encabezado">
         <h1>Proyectos</h1>
@@ -70,7 +70,7 @@ const vacios = Math.max(0, 3 - proyectos.length);
 
 <style>
   .plano {
-    min-height: calc(100dvh - 4rem);
+    min-height: 60dvh;
   }
   .interior {
     max-width: 76rem;

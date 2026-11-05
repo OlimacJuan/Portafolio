@@ -5,9 +5,11 @@ import { sitio, url } from '../config';
 interface Props {
   titulo?: string;
   descripcion?: string;
+  /** Página sobre blueprint: el plano continúa detrás del pie flotante */
+  plano?: boolean;
 }
 
-const { titulo, descripcion = `${sitio.nombre}, ${sitio.titulo.toLowerCase()}. Proyectos, metodologías de diseño y fundamentos de ingeniería explicados paso a paso.` } = Astro.props;
+const { plano = false, titulo, descripcion = `${sitio.nombre}, ${sitio.titulo.toLowerCase()}. Proyectos, metodologías de diseño y fundamentos de ingeniería explicados paso a paso.` } = Astro.props;
 const tituloCompleto = titulo ? `${titulo} · ${sitio.nombre}` : `${sitio.nombre} · Portafolio de Ingeniería Mecánica`;
 const ruta = Astro.url.pathname;
 
@@ -58,6 +60,7 @@ const activo = (href: string) => ruta.startsWith(url(href).replace(/\/$/, ''));
       </div>
     </header>
 
+    <div class:list={['cuerpo-pagina', { blueprint: plano }]}>
     <main id="contenido">
       <slot />
     </main>
@@ -76,6 +79,7 @@ const activo = (href: string) => ruta.startsWith(url(href).replace(/\/$/, ''));
         <p><a href={url('/legal/')}>Aviso legal y tratamiento de datos</a></p>
       </div>
     </footer>
+    </div>
 
     <script>
       // Dibuja los diagramas Mermaid solo en las páginas que los tienen.
@@ -184,6 +188,11 @@ const activo = (href: string) => ruta.startsWith(url(href).replace(/\/$/, ''));
   .menu a[aria-current='page'] {
     color: var(--color-texto);
     border-bottom-color: var(--color-amarillo);
+  }
+  .cuerpo-pagina {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
   main {
     flex: 1;
