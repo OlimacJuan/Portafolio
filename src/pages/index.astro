@@ -91,7 +91,7 @@ const vacios = Math.max(0, 3 - destacados.length);
   .hero-interior {
     max-width: 76rem;
     margin: 0 auto;
-    padding: clamp(3rem, 8vw, 6.5rem) 1rem clamp(3rem, 7vw, 5.5rem);
+    padding: calc(clamp(3rem, 8vw, 6.5rem) + var(--alto-cabecera)) 1rem clamp(3rem, 7vw, 5.5rem);
     display: grid;
     gap: 3rem;
     align-items: center;

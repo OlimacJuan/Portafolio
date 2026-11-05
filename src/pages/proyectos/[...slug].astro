@@ -82,7 +82,7 @@ const fecha = d.fecha.toLocaleDateString('es-CO', { year: 'numeric', month: 'lon
   .cabeza-grid {
     display: grid;
     gap: 2.5rem;
-    padding-top: 2.5rem;
+    padding-top: calc(2.5rem + var(--alto-cabecera));
     padding-bottom: 3rem;
     align-items: center;
   }

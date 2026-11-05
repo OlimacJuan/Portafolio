@@ -35,6 +35,14 @@
   --postit-verde: color-mix(in oklab, var(--color-verde) 34%, white);
   --postit-blanco: #fbfbf8;
   color-scheme: light;
+  /* Espacio que ocupa la barra flotante sobre el inicio de cada página */
+  --alto-cabecera: 4.75rem;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --alto-cabecera: 7rem;
+  }
 }
 
 html {
