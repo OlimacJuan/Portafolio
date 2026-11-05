@@ -51,11 +51,7 @@ const estantes = [
   <div class="interior">
     <header class="encabezado">
       <h1>Conocimiento</h1>
-      <p>
-        Cómo diseño y la teoría que lo sostiene, organizados como una biblioteca. El primer estante reúne las
-        metodologías de diseño; los demás, los fundamentos teóricos. Toma un libro para leerlo. Los lomos desvanecidos
-        son temas en preparación.
-      </p>
+      <p>Toma un libro para leerlo. Los libros desvanecidos son temas en preparación.</p>
     </header>
     <div class="biblioteca">
       {estantes.map((e) => <Estante nombre={e.nombre} libros={e.libros} />)}
@@ -78,7 +74,6 @@ const estantes = [
   }
   .encabezado p {
     margin-top: 1rem;
-    max-width: 58ch;
     line-height: 1.55;
     color: color-mix(in oklab, white 82%, var(--color-cian));
   }
